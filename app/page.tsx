@@ -1,5 +1,9 @@
+import Usuarios from "./componentes/usuarios"
+
 const Index = () => {
-  return
+  return (
+    <Usuarios/>
+  )
 
 }
 
