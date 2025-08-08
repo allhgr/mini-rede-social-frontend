@@ -61,7 +61,9 @@ const Usuarios = () => {
             </div>
 
             {usuarioSelecionado && (
-                <UsuarioEditar usuario={usuarioSelecionado}/>
+                <UsuarioEditar 
+                usuario={usuarioSelecionado} 
+                onClose={() => setUsuarioSelecionado(null)}/>
             )}
         </>
     );
