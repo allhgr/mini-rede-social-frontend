@@ -30,7 +30,7 @@ const MenuLateral = () => {
                 <li style={{
                     padding: "10px",
                     background: pathname === "/usuarios" ? "#1565c0" : "transparent",
-                    borderRadius: "10px"
+                    borderRadius: "10px"  
                 }}>
                     <Link href={"/usuarios"} style={{ textDecoration: "none", color: "inherit" }}>
                         Usuarios
