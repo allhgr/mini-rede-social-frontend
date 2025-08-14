@@ -1,0 +1,15 @@
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.btn-edit {
+    margin-bottom: 10px;
+    color: white;
+    background-color: #1976d2;
+}
+
+.btn-delete {
+    color: white;
+    background-color: red;
+}
