@@ -1,8 +1,14 @@
-import Usuarios from "./componentes/usuarios"
+import Usuarios from "./usuarios/page"
 
 const Index = () => {
   return (
-    <Usuarios/>
+    <div>
+      <h1>Seja bem-vindo à mini rede social estudantil.</h1>
+      <p>
+        Aqui você pode interagir com colegas, compartilhar ideias e acompanhar
+        novidades da sua turma!!!
+      </p>
+    </div>
   )
 
 }

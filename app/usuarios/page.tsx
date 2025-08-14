@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { usuarioDelete, usuarioFindAll } from "../lib/api/usuarios"
-import UsuarioEditar from "./usuarioEditar";
+import UsuarioEditar from "../componentes/usuarioEditar";
 
 const Usuarios = () => {
     const [usuarios, setUsuarios] = useState<any[]>([]);
