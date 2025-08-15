@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { usuarioDelete, usuarioFindAll } from "../lib/api/usuarios"
-import UsuarioEditar from "../componentes/usuarioEditar";
+import UsuarioEditar from "../componentes/usuarios/usuarioEditar";
 import "./page.css"
 
 const Usuarios = () => {
