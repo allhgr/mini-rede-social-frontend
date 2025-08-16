@@ -1,4 +1,6 @@
-export async function usuarioFindAll(): Promise<any> {
+import { typeUsuarios } from "@/app/types/types"
+
+export async function usuarioFindAll(): Promise<typeUsuarios[] | undefined> {
     try {
         const response = await fetch('http://localhost:3000/usuarios', {
             method: 'GET',
@@ -7,7 +9,7 @@ export async function usuarioFindAll(): Promise<any> {
         )
 
         if (response.ok) {
-            const data = await response.json()
+            const data: typeUsuarios[] = await response.json()
             return data
         }
 
@@ -17,7 +19,7 @@ export async function usuarioFindAll(): Promise<any> {
     }
 }
 
-export async function usuarioUpdate(id: number, body: any): Promise<any> {
+export async function usuarioUpdate(id: number, body: typeUsuarios): Promise<typeUsuarios | undefined> {
     try {
         const response = await fetch(`http://localhost:3000/usuarios/${id}`, {
             method: 'PATCH',
@@ -29,17 +31,17 @@ export async function usuarioUpdate(id: number, body: any): Promise<any> {
         )
 
         if (response.ok) {
-            const data = await response.json()
+            const data: typeUsuarios = await response.json()
             return data
         }
 
     } catch {
         alert('Erro ao alterar o usuário')
-        return []
+        return undefined
     }
 }
 
-export async function usuarioDelete(id: number): Promise<any> {
+export async function usuarioDelete(id: number): Promise<typeUsuarios | undefined> {
     try {
         const response = await fetch(`http://localhost:3000/usuarios/${id}`, {
             method: 'DELETE',
@@ -47,17 +49,17 @@ export async function usuarioDelete(id: number): Promise<any> {
         )
 
         if (response.ok) {
-            const data = await response.json()
+            const data: typeUsuarios = await response.json()
             return data
         }
 
     } catch {
         alert('Erro ao excluir o usuário')
-        return []
+        return
     }
 }
 
-export async function usuarioCreate(body: any): Promise<any> {
+export async function usuarioCreate(body: typeUsuarios): Promise<typeUsuarios | undefined> {
     try {
         const response = await fetch(`http://localhost:3000/usuarios/`, {
             method: 'POST',
@@ -69,12 +71,12 @@ export async function usuarioCreate(body: any): Promise<any> {
         )
 
         if (response.ok) {
-            const data = await response.json()
+            const data: typeUsuarios = await response.json()
             return data
         }
 
     } catch {
         alert('Erro ao criar o usuário')
-        return []
+        return
     }
 }

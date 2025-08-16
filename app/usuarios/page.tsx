@@ -4,11 +4,13 @@ import { useEffect, useState } from "react"
 import { usuarioDelete, usuarioFindAll } from "../lib/api/usuarios"
 import UsuarioEditar from "../componentes/usuarios/usuarioEditar";
 import "./page.css"
+import { typeUsuarios } from "../types/types";
 
 const Usuarios = () => {
-    const [usuarios, setUsuarios] = useState<any[]>([]);
-    const [usuarioSelecionado, setUsuarioSelecionado] = useState<any | null>();
+    const [usuarios, setUsuarios] = useState<typeUsuarios[]>([]);
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState<typeUsuarios | null>();
     const [cadastrarUsuario, setCadastrarUsuario] = useState(false);
+    const [senhaVisivel, setSenhaVisivel] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
         fetchBuscaUsuario();
@@ -23,7 +25,7 @@ const Usuarios = () => {
         };
     };
 
-    const handleEditar = (usuario: any) => {
+    const handleEditar = (usuario: typeUsuarios) => {
         setUsuarioSelecionado(usuario);
     }
 
@@ -38,6 +40,13 @@ const Usuarios = () => {
             alert("Erro ao excluir o usuário")
         }
     }
+
+    const handleSenha = (id: number) => {
+        setSenhaVisivel((prev) => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     return (
         <div className="table-container">
@@ -60,10 +69,11 @@ const Usuarios = () => {
                                 <td>{usuario.id}</td>
                                 <td>{usuario.nome_usua}</td>
                                 <td>{usuario.email_usua}</td>
-                                <td>{usuario.senha_usua}</td>
+                                <td>{senhaVisivel[usuario.id!] ? usuario.senha_usua : "*".repeat(usuario.senha_usua.length)}</td>
                                 <td>
+                                    <button className="btn-edit" onClick={() => handleSenha(usuario.id!)}>{senhaVisivel[usuario.id!] ? "👁️" : "👀"}</button>
                                     <button className="btn-edit" onClick={() => handleEditar(usuario)}>Editar</button>
-                                    <button className="btn-delete" onClick={() => handleExcluir(usuario.id)}>Excluir</button>
+                                    <button className="btn-delete" onClick={() => handleExcluir(usuario.id!)}>Excluir</button>
                                 </td>
                             </tr>
                         ))}

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { usuarioCreate, usuarioUpdate } from "../../lib/api/usuarios";
 import "./style.css";
+import { typeUsuarios } from "@/app/types/types";
 
 interface propsUsuario {
-  usuario?: any;
+  usuario?: typeUsuarios;
   onClose: () => void;
   onAtualizar: () => void;
 }
@@ -15,9 +16,13 @@ const UsuarioEditar = ({ usuario, onClose, onAtualizar }: propsUsuario) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const dados = { nome_usua: nome, email_usua: email, senha_usua: senha };
+    const dados: typeUsuarios = {
+      nome_usua: nome,
+      email_usua: email,
+      senha_usua: senha
+    };
     const response = usuario
-      ? await usuarioUpdate(usuario.id, dados)
+      ? await usuarioUpdate(usuario.id!, dados)
       : await usuarioCreate(dados);
 
     if (response) onAtualizar();
