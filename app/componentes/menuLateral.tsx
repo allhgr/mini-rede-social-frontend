@@ -66,6 +66,22 @@ const MenuLateral = () => {
                         👤 {colapsado ? "" : "Usuarios"}
                     </Link>
                 </li>
+
+                <li style={{
+                    padding: "10px",
+                    background: pathname === "/postagens" ? "#1565c0" : "transparent",
+                    borderRadius: "10px",
+                    textAlign: colapsado ? "center" : "left"
+                }}>
+                    <Link href={"/postagens"} style={{
+                        textDecoration: "none",
+                        color: "inherit",
+                        display: "flex",
+                        justifyContent: colapsado ? "center" : "flex-start"
+                    }}>
+                        💬 {colapsado ? "" : "Postagens"}
+                    </Link>
+                </li>
             </ul>
         </aside>
     )
