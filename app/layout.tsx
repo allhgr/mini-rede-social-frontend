@@ -10,7 +10,7 @@ export default function RootLayout({
       <body style={{ margin: 0, fontFamily: "Arial, Sans-serif"}}>
         <div style={{ display: "flex", flexDirection: "row", minHeight: "100vh" }}>
           <MenuLateral />
-          <main style={{flex: 1, padding: "20px"}}>{children}</main>
+          <main style={{flex: 1, padding: "20 px"}}>{children}</main>
         </div>
       </body>
     </html>
