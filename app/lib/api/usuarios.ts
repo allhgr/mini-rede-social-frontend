@@ -80,3 +80,24 @@ export async function usuarioCreate(body: typeUsuarios): Promise<typeUsuarios | 
         return
     }
 }
+
+export async function usuarioFindOneByEmailPass(
+    email: string,
+    pass: string
+  ): Promise<typeUsuarios | undefined> {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/usuarios/${email}/${pass}`,
+        {
+          method: "GET",
+        }
+      );
+  
+      if (response.ok) {
+        const data: typeUsuarios = await response.json();
+        return data;
+      }
+    } catch {
+      return;
+    }
+  }

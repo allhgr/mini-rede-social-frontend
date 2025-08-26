@@ -1,6 +1,7 @@
 .table-container {
     margin-top: 20px;
     overflow-x: auto;
+    padding: 14px;
 }
 
 .btn-edit {
