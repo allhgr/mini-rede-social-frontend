@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react"
+import EmojiPicker from "../componentes/emoji";
 
 interface Mensagem {
     id: number;
@@ -11,8 +12,9 @@ interface Mensagem {
 }
 
 const Postagem = () => {
-    const [novaMensagem, setNovaMensagem] = useState<string>("")
-    const [mensagem, setMensagem] = useState<Mensagem[]>([])
+    const [novaMensagem, setNovaMensagem] = useState<string>("");
+    const [mensagem, setMensagem] = useState<Mensagem[]>([]);
+    const [showEmoji, setShowEmoji] = useState<boolean>(false);
 
     const handleEnviar = () => {
         if (!novaMensagem.trim()) return;
@@ -77,6 +79,23 @@ const Postagem = () => {
                 ))}
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
+
+                <button style={{
+                    padding: "8px 10px",
+                    background: "#f0f0f0",
+                    color: "white",
+                    border: "1px solid #ccc",
+                    borderRadius: "20px",
+                    cursor: "pointer"
+                }} onClick={() => setShowEmoji(!showEmoji)}>😀</button>
+
+                {showEmoji && (
+                    <EmojiPicker onSelect={(emoji) => {
+                        setNovaMensagem((prev) => prev + emoji);
+                        setShowEmoji(false);
+                    }}></EmojiPicker>
+                )}
+
                 <input
                     type="text"
                     placeholder="Digite sua mensagem..."
@@ -89,11 +108,14 @@ const Postagem = () => {
                         border: "1px solid #ccc",
                     }}
                 ></input>
+
                 <button style={{
                     padding: "8px 16px",
                     background: "#1976d2",
                     color: "white",
-                    border: "none"
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer"
                 }} onClick={handleEnviar}>Enviar</button>
             </div>
         </div>

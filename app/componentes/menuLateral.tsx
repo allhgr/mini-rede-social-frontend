@@ -78,7 +78,7 @@ const MenuLateral = () => {
                         </Link>
                     </li>
 
-                    <li style={{ padding: "10px", marginTop: "auto" }}>
+                    <li style={{ padding: "10px", marginTop: "auto", flex: "1"}}>
                         <button
                             onClick={abandonar}
                             style={{
@@ -96,7 +96,7 @@ const MenuLateral = () => {
                     </li>
                 </ul>
             ) : (
-                <p style={{ marginTop: "20px" }}>🔒 Faça login para acessar</p>
+                <p style={{ marginTop: "20px" }}>🔒 {colapsado ? "" : "Faça login!"}</p>
             )}
 
         </aside>
