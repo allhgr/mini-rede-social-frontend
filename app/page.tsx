@@ -21,7 +21,8 @@ const Index = () => {
     if (response) {
       setUsuarios(response);
       setErro("");
-      login();
+
+      login(response.id);
 
       router.push("/postagens");
     } else {

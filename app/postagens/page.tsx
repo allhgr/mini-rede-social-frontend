@@ -1,39 +1,63 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import EmojiPicker from "../componentes/emoji";
-
-interface Mensagem {
-    id: number;
-    usuario: string;
-    texto: string;
-    data: Date;
-    enviadaPorMim: boolean;
-}
+import { postagensFindAll } from "../lib/api/postagens";
+import { typePostagens } from "../types/types";
 
 const Postagem = () => {
     const [novaMensagem, setNovaMensagem] = useState<string>("");
-    const [mensagem, setMensagem] = useState<Mensagem[]>([]);
+    const [mensagem, setMensagem] = useState<typePostagens[]>([]);
     const [showEmoji, setShowEmoji] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);  // Definir o estado loading
+
+    const handleCarregar = async () => {
+        setLoading(true);
+        try {
+            const response = await postagensFindAll();
+
+            if (response) {
+                const mensagens = response.map((msg) => ({
+                    ...msg,
+                    nome_usua: "Usuário",
+                    criacao_post: new Date(msg.criacao_post),  // Forçar a conversão para Date
+                }));
+                setMensagem(mensagens);
+            } else {
+                setMensagem([]);
+            }
+        } catch (error) {
+            console.error("Erro ao carregar postagens:", error);
+        } finally {
+            setLoading(false); // Desativar o carregamento
+        }
+    };
+
+    useEffect(() => {
+        handleCarregar();
+    }, []);
+
 
     const handleEnviar = () => {
         if (!novaMensagem.trim()) return;
 
         const idBase = mensagem.length + 1;
 
-        const suaMensagem: Mensagem = {
+        const suaMensagem: typePostagens = {
             id: idBase,
-            usuario: "Você",
-            texto: novaMensagem,
-            data: new Date(),
+            usuario_id: idBase,
+            nome_usua: "Você",
+            mensagem_post: novaMensagem,
+            criacao_post: new Date(),
             enviadaPorMim: true
         }
 
-        const resposta: Mensagem = {
+        const resposta: typePostagens = {
             id: idBase + 1,
-            usuario: "Sistema",
-            texto: "Mensagem recebida com sucesso",
-            data: new Date(),
+            usuario_id: idBase + 1,
+            nome_usua: "Mensagem Enviada",
+            mensagem_post: "",
+            criacao_post: new Date(),
             enviadaPorMim: false
         }
 
@@ -71,9 +95,16 @@ const Postagem = () => {
                             maxWidth: "60%",
                             fontSize: "15px"
                         }}>
-                            <strong>{msg.usuario}</strong>
-                            <p>{msg.texto}</p>
-                            <small>{msg.data.toLocaleDateString()}</small>
+                            <strong>{msg.nome_usua}</strong>
+                            <p>{msg.mensagem_post}</p>
+                            <small>{msg.criacao_post.toLocaleDateString("pt-BR", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                            })}</small>
                         </div>
                     </div>
                 ))}
