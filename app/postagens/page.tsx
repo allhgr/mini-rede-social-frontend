@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react"
 import EmojiPicker from "../componentes/emoji";
-import { postagensFindAll } from "../lib/api/postagens";
-import { typePostagens } from "../types/types";
+import { postagensFindAll, postagensCreate } from "../lib/api/postagens";
+import { typePostagem } from "../types/types";
+import { useAuth } from "../context/context";
 
 const Postagem = () => {
     const [novaMensagem, setNovaMensagem] = useState<string>("");
-    const [mensagem, setMensagem] = useState<typePostagens[]>([]);
+    const [mensagem, setMensagem] = useState<typePostagem[]>([]);
     const [showEmoji, setShowEmoji] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);  // Definir o estado loading
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const { usuarioId, isAuthenticated } = useAuth();
 
     const handleCarregar = async () => {
         setLoading(true);
@@ -17,10 +20,11 @@ const Postagem = () => {
             const response = await postagensFindAll();
 
             if (response) {
-                const mensagens = response.map((msg) => ({
+                const mensagens: typePostagem[] = response.map((msg: any) => ({
                     ...msg,
-                    nome_usua: "Usuário",
-                    criacao_post: new Date(msg.criacao_post),  // Forçar a conversão para Date
+                    nome_usua: msg.nome_usua, // você pode ajustar isso com base no `usuario_id`
+                    criacao_post: new Date(msg.criacao_post),
+                    enviadaPorMim: false,
                 }));
                 setMensagem(mensagens);
             } else {
@@ -29,7 +33,7 @@ const Postagem = () => {
         } catch (error) {
             console.error("Erro ao carregar postagens:", error);
         } finally {
-            setLoading(false); // Desativar o carregamento
+            setLoading(false);
         }
     };
 
@@ -37,40 +41,76 @@ const Postagem = () => {
         handleCarregar();
     }, []);
 
-
-    const handleEnviar = () => {
+    const handleEnviar = async () => {
         if (!novaMensagem.trim()) return;
 
-        const idBase = mensagem.length + 1;
+        if (!isAuthenticated || !usuarioId) {
+            alert("Você precisa estar logado para enviar mensagens");
+            return;
+        }
 
-        const suaMensagem: typePostagens = {
-            id: idBase,
-            usuario_id: idBase,
-            nome_usua: "Você",
+        const dadosParaEnviar: typePostagem = {
+            usuario_id: usuarioId,
             mensagem_post: novaMensagem,
-            criacao_post: new Date(),
-            enviadaPorMim: true
-        }
+        };
 
-        const resposta: typePostagens = {
-            id: idBase + 1,
-            usuario_id: idBase + 1,
-            nome_usua: "Mensagem Enviada",
-            mensagem_post: "",
-            criacao_post: new Date(),
-            enviadaPorMim: false
-        }
+        try {
+            const novaPostagem = await postagensCreate(dadosParaEnviar);
 
-        setMensagem([...mensagem, suaMensagem, resposta])
-        setNovaMensagem('')
-    }
+            if (!novaPostagem) {
+                const mensagemErroSistema: typePostagem = {
+                    id: Date.now(),
+                    usuario_id: 0,
+                    nome_usua: "Sistema",
+                    mensagem_post: "Erro ao enviar a mensagem.",
+                    criacao_post: new Date(),
+                    enviadaPorMim: false,
+                };
+                setMensagem((prev) => [...prev, mensagemErroSistema]);
+                return;
+            }
+
+            // Como novaPostagem é do tipo typePostagemEnviar (sem id e criacao_post), criamos os campos aqui:
+            const suaMensagem: typePostagem = {
+                id: Date.now(),  // gera um id temporário único
+                usuario_id: novaPostagem.usuario_id,
+                nome_usua: "Você",
+                mensagem_post: novaPostagem.mensagem_post,
+                criacao_post: new Date(),  // atribui data atual
+                enviadaPorMim: true,
+            };
+
+            const mensagemSucessoSistema: typePostagem = {
+                id: Date.now() + 1,
+                usuario_id: 0,
+                nome_usua: "Sistema",
+                mensagem_post: "Mensagem enviada com sucesso!",
+                criacao_post: new Date(),
+                enviadaPorMim: false,
+            };
+
+            setMensagem((prev) => [...prev, suaMensagem, mensagemSucessoSistema]);
+            setNovaMensagem("");
+        } catch (error) {
+            console.error("Erro ao enviar mensagem:", error);
+
+            const mensagemErroCatch: typePostagem = {
+                id: Date.now(),
+                usuario_id: 0,
+                nome_usua: "Sistema",
+                mensagem_post: "Erro ao enviar a mensagem. Tente novamente.",
+                criacao_post: new Date(),
+                enviadaPorMim: false,
+            };
+            setMensagem((prev) => [...prev, mensagemErroCatch]);
+        }
+    };
+
 
     return (
-        <div style={{
-            maxWidth: "800px",
-            margin: "0 auto"
-        }}>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <h2>Mensagens</h2>
+
             <div style={{
                 border: "1px solid #ccc",
                 padding: "10px",
@@ -82,7 +122,7 @@ const Postagem = () => {
                 flexDirection: "column",
                 gap: "8px"
             }}>
-                {mensagem && mensagem.map((msg) => (
+                {mensagem.map((msg) => (
                     <div key={msg.id} style={{
                         display: "flex",
                         justifyContent: msg.enviadaPorMim ? "flex-start" : "flex-end"
@@ -97,7 +137,7 @@ const Postagem = () => {
                         }}>
                             <strong>{msg.nome_usua}</strong>
                             <p>{msg.mensagem_post}</p>
-                            <small>{msg.criacao_post.toLocaleDateString("pt-BR", {
+                            <small>{msg.criacao_post?.toLocaleDateString("pt-BR", {
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
@@ -109,8 +149,8 @@ const Postagem = () => {
                     </div>
                 ))}
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
 
+            <div style={{ display: "flex", gap: "10px" }}>
                 <button style={{
                     padding: "8px 10px",
                     background: "#f0f0f0",
@@ -124,7 +164,7 @@ const Postagem = () => {
                     <EmojiPicker onSelect={(emoji) => {
                         setNovaMensagem((prev) => prev + emoji);
                         setShowEmoji(false);
-                    }}></EmojiPicker>
+                    }} />
                 )}
 
                 <input
@@ -138,7 +178,7 @@ const Postagem = () => {
                         borderRadius: "6px",
                         border: "1px solid #ccc",
                     }}
-                ></input>
+                />
 
                 <button style={{
                     padding: "8px 16px",
@@ -150,7 +190,7 @@ const Postagem = () => {
                 }} onClick={handleEnviar}>Enviar</button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Postagem
+export default Postagem;

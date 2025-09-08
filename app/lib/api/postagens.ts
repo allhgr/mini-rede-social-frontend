@@ -1,6 +1,6 @@
-import { typePostagens } from "@/app/types/types"
+import { typePostagem } from "@/app/types/types"
 
-export async function postagensFindAll(): Promise<typePostagens[] | undefined> {
+export async function postagensFindAll(): Promise<typePostagem[] | undefined> {
     try {
         const response = await fetch('http://localhost:3000/postagens', {
             method: 'GET',
@@ -9,7 +9,7 @@ export async function postagensFindAll(): Promise<typePostagens[] | undefined> {
         )
 
         if (response.ok) {
-            const data: typePostagens[] = await response.json()
+            const data: typePostagem[] = await response.json()
             return data
         }
 
@@ -19,7 +19,7 @@ export async function postagensFindAll(): Promise<typePostagens[] | undefined> {
     }
 }
 
-export async function postagensCreate(body: typePostagens): Promise<typePostagens | undefined> {
+export async function postagensCreate(body: typePostagem): Promise<typePostagem | undefined> {
     try {
         const response = await fetch(`http://localhost:3000/postagens/`, {
             method: 'POST',
@@ -31,7 +31,7 @@ export async function postagensCreate(body: typePostagens): Promise<typePostagen
         )
 
         if (response.ok) {
-            const data: typePostagens = await response.json()
+            const data: typePostagem = await response.json()
             return data
         }
 

@@ -5,11 +5,13 @@ export interface typeUsuarios {
     senha_usua: string;
 }
 
-export interface typePostagens {
+
+export interface typePostagem {
     id?: number;
     nome_usua?: string;
     usuario_id: number;
     mensagem_post: string;
-    criacao_post: Date;
+    criacao_post?: Date;
     enviadaPorMim?: boolean;
-}
+  }
+  
