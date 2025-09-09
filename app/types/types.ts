@@ -1,5 +1,5 @@
 export interface typeUsuarios {
-    id: number;
+    id?: number;
     nome_usua: string;
     email_usua: string;
     senha_usua: string;
@@ -15,3 +15,9 @@ export interface typePostagem {
     enviadaPorMim?: boolean;
   }
   
+export interface typePerfil {
+    usuario?: any;
+    id?: number;
+    usuario_id: number;
+    nome_per: string;
+}

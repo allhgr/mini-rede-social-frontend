@@ -22,7 +22,7 @@ const Postagem = () => {
             if (response) {
                 const mensagens: typePostagem[] = response.map((msg: any) => ({
                     ...msg,
-                    nome_usua: msg.nome_usua, // você pode ajustar isso com base no `usuario_id`
+                    nome_usua: msg.usuario.nome_usua,
                     criacao_post: new Date(msg.criacao_post),
                     enviadaPorMim: false,
                 }));

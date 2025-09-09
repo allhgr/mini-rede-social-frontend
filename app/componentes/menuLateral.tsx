@@ -46,6 +46,7 @@ const MenuLateral = () => {
 
             {isAuthenticated ? (
                 <ul style={{ listStyle: "none", padding: "0px", margin: "0px", width: "100%" }}>
+
                     <li style={{
                         padding: "10px",
                         background: pathname === "/usuarios" ? "#1565c0" : "transparent",
@@ -78,7 +79,23 @@ const MenuLateral = () => {
                         </Link>
                     </li>
 
-                    <li style={{ padding: "10px", marginTop: "auto", flex: "1" }}>
+                    <li style={{
+                        padding: "10px",
+                        background: pathname === "/perfil" ? "#1565c0" : "transparent",
+                        borderRadius: "10px",
+                        textAlign: colapsado ? "center" : "left"
+                    }}>
+                        <Link href={"/perfil"} style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                            display: "flex",
+                            justifyContent: colapsado ? "center" : "flex-start"
+                        }}>
+                            📜 {colapsado ? "" : "Perfil"}
+                        </Link>
+                    </li>
+
+                    <li style={{ padding: "10px", marginTop: "40vh", flex: "1" }}>
                         <button
                             onClick={abandonar}
                             style={{
@@ -89,8 +106,7 @@ const MenuLateral = () => {
                                 border: "none",
                                 borderRadius: "6px",
                                 cursor: "pointer",
-                            }}
-                        >
+                            }}>
                             🔓 {colapsado ? "" : "Sair"}
                         </button>
                     </li>
