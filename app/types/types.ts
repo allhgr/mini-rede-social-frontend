@@ -16,7 +16,9 @@ export interface typePostagem {
   }
   
 export interface typePerfil {
-    usuario?: any;
+    usuario?: {
+        nome_usua: string;
+      };
     id?: number;
     usuario_id: number;
     nome_per: string;

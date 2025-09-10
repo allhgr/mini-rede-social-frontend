@@ -60,7 +60,7 @@ const Perfil = () => {
                         {perfil.map((perfil) => (
                             <tr key={perfil.id}>
                                 <td>{perfil.id}</td>
-                                <td>{perfil.usuario.nome_usua}</td>
+                                <td>{perfil.usuario?.nome_usua}</td>
                                 <td>{perfil.usuario_id}</td>
                                 <td>{perfil.nome_per}</td>
                                 <td>
