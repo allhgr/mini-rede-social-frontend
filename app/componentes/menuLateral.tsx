@@ -95,6 +95,22 @@ const MenuLateral = () => {
                         </Link>
                     </li>
 
+                    <li style={{
+                        padding: "10px",
+                        background: pathname === "/permissoes" ? "#1565c0" : "transparent",
+                        borderRadius: "10px",
+                        textAlign: colapsado ? "center" : "left"
+                    }}>
+                        <Link href={"/permissoes"} style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                            display: "flex",
+                            justifyContent: colapsado ? "center" : "flex-start"
+                        }}>
+                            🛡️ {colapsado ? "" : "Permissoes"}
+                        </Link>
+                    </li>
+
                     <li style={{ padding: "10px", marginTop: "40vh", flex: "1" }}>
                         <button
                             onClick={abandonar}

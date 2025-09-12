@@ -11,9 +11,7 @@ interface propsPerfil {
 }
 
 const PerfilEditar = ({ perfil, onClose, onAtualizar }: propsPerfil) => {
-  const [userid, setUserid] = useState<string>(
-    perfil?.usuario_id?.toString() ?? ""
-  );
+  const [userid, setUserid] = useState(perfil?.usuario_id ?? 0);
   const [nome_per, setNomePer] = useState(perfil?.nome_per ?? "");
   const [usuarios, setUsuarios] = useState<typeUsuarios[]>([]);
 
@@ -50,7 +48,7 @@ const PerfilEditar = ({ perfil, onClose, onAtualizar }: propsPerfil) => {
             Usuário:
             <select
               value={userid}
-              onChange={(e) => setUserid(e.target.value)}
+              onChange={(e) => setUserid(Number(e.target.value))}
               required
               disabled={!!perfil}
             >
